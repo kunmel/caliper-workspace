@@ -1,0 +1,19 @@
+test:
+  name: basic-contract-benchmark
+  description: test benchmark
+  workers:
+    type: local
+    number: 2
+  rounds:
+    - label: sgxTx
+      description: Read asset benchmark
+      txDuration: 15
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 200
+      workload:
+        module: benchmarks/sgxTx.js
+        arguments:
+          assets: 10
+

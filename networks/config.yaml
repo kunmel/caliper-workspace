@@ -1,0 +1,194 @@
+name: Fabric
+version: "1.0"
+
+caliper:
+  blockchain: fabric
+
+clients:
+  Admin@org1.example.com:
+    client:
+      organization: Org1
+      credentialStore:
+        path: /tmp/org1
+        cryptoStore:
+          path: /tmp/org1
+      clientPrivateKey:
+        path: ../fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/cf847c39a9b89272ce74f7eed0f803260f789b9fdfca40d24ef11043c167d0e1_sk
+      clientSignedCert:
+        path: ../fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem
+
+  Admin@org2.example.com:
+    client:
+      organization: Org2
+      credentialStore:
+        path: /tmp/org2
+        cryptoStore:
+          path: /tmp/org2
+      clientPrivateKey:
+        path: ../fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/b95a9b542e06c0522734047ad9ebe6abd47c6a0d5763e32429077ac4f3bf765f_sk
+      clientSignedCert:
+        path: ../fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/Admin@org2.example.com-cert.pem
+
+
+channels:
+  mychannel:
+    configBinary: networks/mychannel.tx
+    created: true
+    orderers:
+      - orderer.example.com
+    peers:
+      peer0.org1.example.com:
+        eventSource: true
+      peer0.org2.example.com:
+        eventSource: true
+      peer1.org2.example.com:
+        eventSource: true
+    contracts:
+      - id: mycc
+        version: "1.0"
+        language: golang
+
+
+organizations:
+  Org1:
+    mspid: Org1MSP
+    peers:
+      - peer0.org1.example.com
+      - peer1.org1.example.com
+    adminPrivateKey:
+      path: ../fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/cf847c39a9b89272ce74f7eed0f803260f789b9fdfca40d24ef11043c167d0e1_sk
+    signedCert:
+      path: ../fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem
+
+  Org2:
+    mspid: Org2MSP
+    peers:
+      - peer0.org2.example.com
+      - peer1.org2.example.com
+    adminPrivateKey:
+      path: ../fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/b95a9b542e06c0522734047ad9ebe6abd47c6a0d5763e32429077ac4f3bf765f_sk
+    signedCert:
+      path: ../fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/Admin@org2.example.com-cert.pem
+
+orderers:
+  orderer.example.com:
+    url: grpcs://localhost:7050
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICQjCCAemgAwIBAgIQT83/pIU31pcP0fthMAX/+DAKBggqhkjOPQQDAjBsMQsw
+        CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+        YW5jaXNjbzEUMBIGA1UEChMLZXhhbXBsZS5jb20xGjAYBgNVBAMTEXRsc2NhLmV4
+        YW1wbGUuY29tMB4XDTIxMDkwNjA4NDcwMFoXDTMxMDkwNDA4NDcwMFowbDELMAkG
+        A1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFu
+        Y2lzY28xFDASBgNVBAoTC2V4YW1wbGUuY29tMRowGAYDVQQDExF0bHNjYS5leGFt
+        cGxlLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABM4yBN4/87ySoytZzXCx
+        Lplepj6t8QqdQciKZkiXzvex+LdZar+txID58eFfqsMzrlLkLhsNad+5K6XZEKFJ
+        EqujbTBrMA4GA1UdDwEB/wQEAwIBpjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYB
+        BQUHAwEwDwYDVR0TAQH/BAUwAwEB/zApBgNVHQ4EIgQgHvPTEgHsB17cvY7xZzAJ
+        T6px2eHTZAamLH7CBT8Gk98wCgYIKoZIzj0EAwIDRwAwRAIgDTT7yiQIXIwbhMq4
+        9WouLyBZ/HDE1zuWctneMduJvkcCIExEinheus76ie3IOcqFeSk3EOaRU6AWWgJw
+        3azUTxXP
+        -----END CERTIFICATE-----
+    grpcOptions:
+      ssl-target-name-override: orderer.example.com
+      hostnameOverride: orderer.example.com
+
+peers:
+  peer0.org1.example.com:
+    url: grpcs://localhost:7051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICVjCCAf2gAwIBAgIQf5PxTWuaO6J3fE08rOOdHzAKBggqhkjOPQQDAjB2MQsw
+        CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+        YW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEfMB0GA1UEAxMWdGxz
+        Y2Eub3JnMS5leGFtcGxlLmNvbTAeFw0yMTA5MDYwODQ3MDBaFw0zMTA5MDQwODQ3
+        MDBaMHYxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQH
+        Ew1TYW4gRnJhbmNpc2NvMRkwFwYDVQQKExBvcmcxLmV4YW1wbGUuY29tMR8wHQYD
+        VQQDExZ0bHNjYS5vcmcxLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+        AQcDQgAE4Lin9OTE89AQR8+m+GMAufhcEFJktSZMW6OaXt2+fGy9bYG6X/9uLR1e
+        I8EuTwu1ufvJeE/3uyjZ+ZOu63qUR6NtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1Ud
+        JQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1Ud
+        DgQiBCDVQkQwnkonm5f5WtQaNiSlllOOThrVWWVCCqj7w7xqVTAKBggqhkjOPQQD
+        AgNHADBEAiB4BWh0NOrmQDPwwMFmUyyA8k9tjfnSvWkObTrsDeFLbAIgS5fAYqjq
+        +OBOhNkKTW4cMQw3Q4wRa/wbRGjMwTJ9J28=
+        -----END CERTIFICATE-----
+    grpcOptions:
+      ssl-target-name-override: peer0.org1.example.com
+      hostnameOverride: peer0.org1.example.com
+      grpc.keepalive_time_ms: 600000
+
+  peer1.org1.example.com:
+    url: grpcs://localhost:8051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICVjCCAf2gAwIBAgIQf5PxTWuaO6J3fE08rOOdHzAKBggqhkjOPQQDAjB2MQsw
+        CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+        YW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEfMB0GA1UEAxMWdGxz
+        Y2Eub3JnMS5leGFtcGxlLmNvbTAeFw0yMTA5MDYwODQ3MDBaFw0zMTA5MDQwODQ3
+        MDBaMHYxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQH
+        Ew1TYW4gRnJhbmNpc2NvMRkwFwYDVQQKExBvcmcxLmV4YW1wbGUuY29tMR8wHQYD
+        VQQDExZ0bHNjYS5vcmcxLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+        AQcDQgAE4Lin9OTE89AQR8+m+GMAufhcEFJktSZMW6OaXt2+fGy9bYG6X/9uLR1e
+        I8EuTwu1ufvJeE/3uyjZ+ZOu63qUR6NtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1Ud
+        JQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1Ud
+        DgQiBCDVQkQwnkonm5f5WtQaNiSlllOOThrVWWVCCqj7w7xqVTAKBggqhkjOPQQD
+        AgNHADBEAiB4BWh0NOrmQDPwwMFmUyyA8k9tjfnSvWkObTrsDeFLbAIgS5fAYqjq
+        +OBOhNkKTW4cMQw3Q4wRa/wbRGjMwTJ9J28=
+        -----END CERTIFICATE-----
+    grpcOptions:
+      ssl-target-name-override: peer1.org1.example.com
+      hostnameOverride: peer1.org1.example.com
+      grpc.keepalive_time_ms: 600000
+
+  peer0.org2.example.com:
+    url: grpcs://localhost:9051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICVzCCAf2gAwIBAgIQKuqQ58CR3YE3BjfXkelRFDAKBggqhkjOPQQDAjB2MQsw
+        CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+        YW5jaXNjbzEZMBcGA1UEChMQb3JnMi5leGFtcGxlLmNvbTEfMB0GA1UEAxMWdGxz
+        Y2Eub3JnMi5leGFtcGxlLmNvbTAeFw0yMTA5MDYwODQ3MDBaFw0zMTA5MDQwODQ3
+        MDBaMHYxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQH
+        Ew1TYW4gRnJhbmNpc2NvMRkwFwYDVQQKExBvcmcyLmV4YW1wbGUuY29tMR8wHQYD
+        VQQDExZ0bHNjYS5vcmcyLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+        AQcDQgAExvL3T7m2zdf4eCZkEM37bQ6dGshtOBeg4sikJKIlg1P+J2E/cfYdbvEa
+        a4GQGuXN4cWHCT7wrOLUbBCBUSV6IKNtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1Ud
+        JQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1Ud
+        DgQiBCBFcTl/2J+nNSZBvGP9BXc9rDAMs/Fl88iqlPw6Y2C7czAKBggqhkjOPQQD
+        AgNIADBFAiEAw5AZrIERHGeDclGGo1Vx22QfigSMZ60VuCfaAdUrVqkCIEAGP0he
+        SYCC1qD4KIkggyZ/IrVnfYUKtA7toqYPFHzG
+        -----END CERTIFICATE-----
+    grpcOptions:
+      ssl-target-name-override: peer0.org2.example.com
+      hostnameOverride: peer0.org2.example.com
+      grpc.keepalive_time_ms: 600000
+
+  peer1.org2.example.com:
+    url: grpcs://localhost:10051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICVzCCAf2gAwIBAgIQKuqQ58CR3YE3BjfXkelRFDAKBggqhkjOPQQDAjB2MQsw
+        CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+        YW5jaXNjbzEZMBcGA1UEChMQb3JnMi5leGFtcGxlLmNvbTEfMB0GA1UEAxMWdGxz
+        Y2Eub3JnMi5leGFtcGxlLmNvbTAeFw0yMTA5MDYwODQ3MDBaFw0zMTA5MDQwODQ3
+        MDBaMHYxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQH
+        Ew1TYW4gRnJhbmNpc2NvMRkwFwYDVQQKExBvcmcyLmV4YW1wbGUuY29tMR8wHQYD
+        VQQDExZ0bHNjYS5vcmcyLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+        AQcDQgAExvL3T7m2zdf4eCZkEM37bQ6dGshtOBeg4sikJKIlg1P+J2E/cfYdbvEa
+        a4GQGuXN4cWHCT7wrOLUbBCBUSV6IKNtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1Ud
+        JQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1Ud
+        DgQiBCBFcTl/2J+nNSZBvGP9BXc9rDAMs/Fl88iqlPw6Y2C7czAKBggqhkjOPQQD
+        AgNIADBFAiEAw5AZrIERHGeDclGGo1Vx22QfigSMZ60VuCfaAdUrVqkCIEAGP0he
+        SYCC1qD4KIkggyZ/IrVnfYUKtA7toqYPFHzG
+        -----END CERTIFICATE-----
+    grpcOptions:
+      ssl-target-name-override: peer1.org2.example.com
+      hostnameOverride: peer1.org2.example.com
+      grpc.keepalive_time_ms: 600000
+
+

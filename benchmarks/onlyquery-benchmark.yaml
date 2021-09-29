@@ -1,0 +1,19 @@
+test:
+  name: basic-contract-benchmark
+  description: test benchmark
+  workers:
+    type: local
+    number: 4
+  rounds:
+    - label: onlyquery
+      description: Read asset benchmark
+      txDuration: 15
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 512
+      workload:
+        module: benchmarks/onlyquery.js
+        arguments:
+          assets: 10
+
